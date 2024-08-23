@@ -1,0 +1,9 @@
+1. set args arg1 arg2 arg3 ...
+2. b ...
+3. si(stepi)
+4. ni(nexti)
+5. c
+6. p 1+2
+7. display var(for example : display count)
+8. info locals (info variables  including headerfiles)
+9. q(quit)
