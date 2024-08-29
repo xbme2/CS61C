@@ -28,11 +28,12 @@ void processCLI(int argc, char **argv, char **filename)
 
 int main(int argc, char **argv)
 {
-	Image *image;
-	uint32_t rule;
-	char *filename;
-	processCLI(argc,argv,&filename);
-	image = readData(filename);
-	writeData(image);
-	freeImage(image);
+	// Image *image;
+	// uint32_t rule;
+	// char *filename;
+	// processCLI(argc,argv,&filename);
+	// image = readData(filename);
+	// writeData(image);
+	// freeImage(image);
+	printf("%o\n",19);
 }

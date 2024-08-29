@@ -17,22 +17,56 @@
 #include <stdlib.h>
 #include <inttypes.h>
 #include "imageloader.h"
-
-//Determines what color the cell at the given row/col should be. This should not affect Image, and should allocate space for a new Color.
+#define MASK 0b00000001
+// Determines what color the cell at the given row/col should be. This should not affect Image, and should allocate space for a new Color.
 Color *evaluateOnePixel(Image *image, int row, int col)
 {
-	//YOUR CODE HERE
+	// YOUR CODE HERE
+	assert(image && row >= 0 && col >= 0);
+	assert(image->image[row * image->rows + col]);
+	Color *currentCOlor = image->image[row * image->rows + col];
+	Color *newColor = malloc(sizeof(Color));
+	if (currentCOlor->B & MASK)
+	{
+		free(currentCOlor);
+		*newColor = (Color){
+			.R = 255,
+			.G = 255,
+			.B = 255
+		};
+	}
+	else
+	{
+		free(currentCOlor);
+		*newColor = (Color){
+			.R = 0,
+			.G = 0,
+			.B = 0
+		};
+	}
+	return newColor;
 }
 
-//Given an image, creates a new image extracting the LSB of the B channel.
+// Given an image, creates a new image extracting the LSB of the B channel.
 Image *steganography(Image *image)
 {
-	//YOUR CODE HERE
+	// YOUR CODE HERE
+	assert(image && image->image);
+	for (size_t i = 0; i < image->rows; i++)
+	{
+		for (size_t j = 0; j < image->cols; j++)
+		{
+			image->image[i * image->rows + j] = evaluateOnePixel(image,i,j);
+		}
+		
+	}
+	return image;
+	
 }
 
 /*
-Loads a file of ppm P3 format from a file, and prints to stdout (e.g. with printf) a new image, 
-where each pixel is black if the LSB of the B channel is 0, 
+Loads a file of ppm P3 format from a file, and prints to stdout (e.g. with printf) a new image,
+where each pixel is black if the LSB of the B channel is 0,
 and white if the LSB of the B channel is 1.
 
 argc stores the number of arguments.
@@ -43,7 +77,24 @@ If the input is not correct, a malloc fails, or any other error occurs, you shou
 Otherwise, you should return from main with code 0.
 Make sure to free all memory before returning!
 */
+void processCLI(int argc, char **argv, char **filename) 
+{
+	if (argc != 2) {
+		printf("usage: %s filename\n",argv[0]);
+		printf("filename is an ASCII PPM file (type P3) with maximum value 255.\n");
+		exit(-1);
+	}
+	*filename = argv[1];
+}
 int main(int argc, char **argv)
 {
-	//YOUR CODE HERE
+	// YOUR CODE HERE
+	Image *image;
+	// uint32_t rule;
+	char *filename;
+	processCLI(argc,argv,&filename);
+	image = readData(filename);
+	image = steganography(image);
+	writeData(image);
+	freeImage(image);
 }
