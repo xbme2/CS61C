@@ -23,8 +23,8 @@ Color *evaluateOnePixel(Image *image, int row, int col)
 {
 	// YOUR CODE HERE
 	assert(image && row >= 0 && col >= 0);
-	assert(image->image[row * image->rows + col]);
-	Color *currentCOlor = image->image[row * image->rows + col];
+	assert(image->image[row * image->cols + col]);
+	Color *currentCOlor = image->image[row * image->cols + col];
 	Color *newColor = malloc(sizeof(Color));
 	if (currentCOlor->B & MASK)
 	{
@@ -32,8 +32,7 @@ Color *evaluateOnePixel(Image *image, int row, int col)
 		*newColor = (Color){
 			.R = 255,
 			.G = 255,
-			.B = 255
-		};
+			.B = 255};
 	}
 	else
 	{
@@ -41,8 +40,7 @@ Color *evaluateOnePixel(Image *image, int row, int col)
 		*newColor = (Color){
 			.R = 0,
 			.G = 0,
-			.B = 0
-		};
+			.B = 0};
 	}
 	return newColor;
 }
@@ -52,16 +50,18 @@ Image *steganography(Image *image)
 {
 	// YOUR CODE HERE
 	assert(image && image->image);
-	for (size_t i = 0; i < image->rows; i++)
+	Image *newImage = (Image *)malloc(sizeof(Image));
+	newImage->cols = image->cols;
+	newImage->rows = image->rows;
+	newImage->image = (Color **)malloc(sizeof(Color *) * (image->rows) * (image->cols));
+	for (int i = 0; i < newImage->rows; i++)
 	{
-		for (size_t j = 0; j < image->cols; j++)
+		for (int j = 0; j < newImage->cols; j++)
 		{
-			image->image[i * image->rows + j] = evaluateOnePixel(image,i,j);
+			newImage->image[i * newImage->cols + j] = evaluateOnePixel(image, i, j);
 		}
-		
 	}
-	return image;
-	
+	return newImage;
 }
 
 /*
@@ -77,10 +77,11 @@ If the input is not correct, a malloc fails, or any other error occurs, you shou
 Otherwise, you should return from main with code 0.
 Make sure to free all memory before returning!
 */
-void processCLI(int argc, char **argv, char **filename) 
+void processCLI(int argc, char **argv, char **filename)
 {
-	if (argc != 2) {
-		printf("usage: %s filename\n",argv[0]);
+	if (argc != 2)
+	{
+		printf("usage: %s filename\n", argv[0]);
 		printf("filename is an ASCII PPM file (type P3) with maximum value 255.\n");
 		exit(-1);
 	}
@@ -92,7 +93,7 @@ int main(int argc, char **argv)
 	Image *image;
 	// uint32_t rule;
 	char *filename;
-	processCLI(argc,argv,&filename);
+	processCLI(argc, argv, &filename);
 	image = readData(filename);
 	image = steganography(image);
 	writeData(image);

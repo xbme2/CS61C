@@ -19,6 +19,8 @@ typedef struct Image
 //Loads an image from a ppm file, and converts to an Image object
 extern Image *readData(char *filename);
 
+void Test(Image * newImage, int scale);
+
 //Writes an image to stdout
 extern void writeData(Image *image);
 
