@@ -18,9 +18,9 @@ argmax:
 
     # Prologue
 
+    beq a1, x0, wrong_exit
 
 loop_start:
-    beq a1, x0, wrong_exit
 
     lw t0, 0(a0)    # t0 stores max value
     add t1, x0, x0  # t1 stores max index

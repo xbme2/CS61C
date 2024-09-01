@@ -1,5 +1,5 @@
 .globl relu
-
+.globl wrong_exit
 .text
 # ==============================================================================
 # FUNCTION: Performs an inplace element-wise ReLU on an array of ints
@@ -15,9 +15,9 @@
 relu:
     # Prologue
 
+    beq a1, x0 , wrong_exit # If the length of the vector is less than 1, wrong exit; 
 
 loop_start:
-    beq a1, x0 , wrong_exit # If the length of the vector is less than 1, wrong exit; 
     
 loop_continue:
     lw t0, 0(a0)

@@ -25,38 +25,113 @@
 matmul:
 
     # Error checks
+    ble a1, x0, 2_exit
+    ble a2, x0, 2_exit
 
-
+    ble a4, x0, 3_exit
+    ble a5, x0, 3_exit
+    
+    bne a2, a4, 4_exit
     # Prologue
 
+    addi sp, sp, -32
+    sw s0, 0(sp)
+    sw s1, 4(sp)
+    sw s2, 8(sp)
+    sw s3, 12(sp)
+    sw s4, 16(sp)
+    sw s5, 20(sp)
+    sw s6, 24(sp)
+    sw ra, 28(sp)
+
+    mv s0, a0
+    mv s1, a1
+    mv s2, a2
+    mv s3, a3
+    mv s4, a4
+    mv s5, a5
+    mv s6, a6
+
+    addi t6, x0, 4
+
+    li t0, 0        # current row of m0
+    li t1, 0        # current col of m1
+    add t2, x0, s2
+    mul t2, t2, t6  # when inner_loop finishes, s0 += t2
+    mv t3, s5       # stride of m1
+    mul t4, t3, t6  # when inner_loop finishes, s3 -= t4
+    
 
 outer_loop_start:
-
-
+    mv a0, s0
+    mv a2, s2       # don't change a2
+    li a3, 1
+    mv a4, s5       # Arguments of dot
 
 
 inner_loop_start:
+    mv a1, s3       # pointer of m1 col
+    addi sp, sp, -28
+    sw t0, 0(sp)
+    sw t1, 4(sp)
+    sw t2, 8(sp)
+    sw t3, 12(sp)
+    sw t4, 16(sp)
+    sw t5, 20(sp)
+    sw t6, 24(sp)
+
+    jal ra, dot
+    sw a0, 0(s6)       # stores dot answer
+    addi s6, s6, 4   # s6 into next content
+
+    lw t0, 0(sp)
+    lw t1, 4(sp)
+    lw t2, 8(sp)
+    lw t3, 12(sp)
+    lw t4, 16(sp)
+    lw t5, 20(sp)
+    lw t6, 24(sp)
+    addi sp, sp, 28
 
 
-
-
-
-
-
-
-
-
-
+    addi s3, s3, 4
+    addi t1, t1, 1
+    blt t1, s5, inner_loop_start
 
 inner_loop_end:
 
-
-
+    
+    add s0, s0, t2  # m0 into next row
+    addi t0, t0, 1  # m0 current row +1
+    sub s3, s3, t4  # s3 reset initial col
+    sub t1, t1, s5  # t1 reset 0
+    blt t0, s1, outer_loop_start
 
 outer_loop_end:
 
 
     # Epilogue
-    
+    lw s0, 0(sp)
+    lw s1, 4(sp)
+    lw s2, 8(sp)
+    lw s3, 12(sp)
+    lw s4, 16(sp)
+    lw s5, 20(sp)
+    lw s6, 24(sp)
+    lw ra, 28(sp)
+    addi sp, sp, 32
     
     ret
+
+2_exit:
+    li a0, 10
+    li a1, 2
+    ecall
+3_exit:
+    li a0, 10
+    li a1, 3
+    ecall
+4_exit:
+    li a0, 10
+    li a1, 4
+    ecall
