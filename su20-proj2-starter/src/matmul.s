@@ -25,13 +25,11 @@
 matmul:
 
     # Error checks
-    ble a1, x0, 2_exit
-    ble a2, x0, 2_exit
-
-    ble a4, x0, 3_exit
-    ble a5, x0, 3_exit
-    
-    bne a2, a4, 4_exit
+    ble a1, x0, 2_exit      # m0行数 <= 0  
+    ble a2, x0, 2_exit      # m0列数 <= 0  
+    ble a4, x0, 3_exit      # m1行数 <= 0  
+    ble a5, x0, 3_exit      # m1列数 <= 0  
+    bne a2, a4, 4_exit      # m0列数 != m1行数 
     # Prologue
 
     addi sp, sp, -32
@@ -52,59 +50,49 @@ matmul:
     mv s5, a5
     mv s6, a6
 
-    addi t6, x0, 4
 
     li t0, 0        # current row of m0
-    li t1, 0        # current col of m1
-    add t2, x0, s2
-    mul t2, t2, t6  # when inner_loop finishes, s0 += t2
-    mv t3, s5       # stride of m1
-    mul t4, t3, t6  # when inner_loop finishes, s3 -= t4
+    li t2, 4
+    mul t2, t2, s2  # when inner_loop finishes, s0 += t2
+
     
 
 outer_loop_start:
-    mv a0, s0
-    mv a2, s2       # don't change a2
-    li a3, 1
-    mv a4, s5       # Arguments of dot
 
+    li t1, 0        # current col of m1
 
 inner_loop_start:
-    mv a1, s3       # pointer of m1 col
-    addi sp, sp, -28
+    li t3, 4
+    mul t3, t3, t1
+    add a1, s3, t3      # pointer of m1 col
+
+    mv a0, s0
+    mv a2, s2       
+    li a3, 1
+    mv a4, s5       # Arguments of dot , each inner_cycle update - dot function changes a# 
+
+    addi sp, sp, -12
     sw t0, 0(sp)
     sw t1, 4(sp)
     sw t2, 8(sp)
-    sw t3, 12(sp)
-    sw t4, 16(sp)
-    sw t5, 20(sp)
-    sw t6, 24(sp)
 
-    jal ra, dot
+    jal  dot
     sw a0, 0(s6)       # stores dot answer
     addi s6, s6, 4   # s6 into next content
 
     lw t0, 0(sp)
     lw t1, 4(sp)
     lw t2, 8(sp)
-    lw t3, 12(sp)
-    lw t4, 16(sp)
-    lw t5, 20(sp)
-    lw t6, 24(sp)
-    addi sp, sp, 28
+    addi sp, sp, 12
 
 
-    addi s3, s3, 4
     addi t1, t1, 1
     blt t1, s5, inner_loop_start
 
 inner_loop_end:
 
-    
     add s0, s0, t2  # m0 into next row
     addi t0, t0, 1  # m0 current row +1
-    sub s3, s3, t4  # s3 reset initial col
-    sub t1, t1, s5  # t1 reset 0
     blt t0, s1, outer_loop_start
 
 outer_loop_end:
@@ -135,3 +123,5 @@ outer_loop_end:
     li a0, 10
     li a1, 4
     ecall
+
+
