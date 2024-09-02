@@ -1,5 +1,4 @@
 .globl relu
-.globl wrong_exit
 .text
 # ==============================================================================
 # FUNCTION: Performs an inplace element-wise ReLU on an array of ints
@@ -32,9 +31,8 @@ loop_end:
 	ret
 
 wrong_exit:
-    addi a0, x0, 10
-    addi a1, x0, 8
-    ecall  #Exit 8
+    li a1, 8
+    j exit2  #Exit 8
 
 
 #ecall

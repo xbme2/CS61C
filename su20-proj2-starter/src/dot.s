@@ -21,18 +21,18 @@ dot:
 
     # Prologue
 
-    addi t0, x0, 1
+    li t0, 1
     blt a2, t0, 5_exit
     blt a3, t0, 6_exit
     blt a4, t0, 6_exit
 
 loop_start:
-    addi t0, x0, 0  # t0 stores v0 index
-    addi t6, x0, 0  # t6 stores v1 index
-    addi t1, x0, 0  # t1 stores sum
-    addi t2, x0, 4   
+    li t0, 0  # t0 stores v0 index
+    li t6, 0  # t6 stores v1 index
+    li t1, 0  # t1 stores sum
+    li t2, 4   
     mul t2, t2, a3  # t2 stores 4* v0 stride
-    addi t3, x0, 4
+    li t3, 4
     mul t3, t3, a4  # t3 stores 4* v1 stride
 
 loop_continue:
@@ -54,10 +54,8 @@ loop_end:
     ret
 
 5_exit:
-    addi a0, x0, 10
-    addi a1, x0, 5
-    ecall
+    li a1, 5
+    j exit2
 6_exit:
-    addi a0, x0, 10
-    addi a1, x0, 6
-    ecall
+    li a1, 6
+    j exit2

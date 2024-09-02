@@ -46,6 +46,5 @@ loop_end:
 
 
 wrong_exit:
-    addi a0, x0, 10
-    addi a1, x0, 7
-    ecall  #Exit 7
+    li a1, 7
+    j exit2  #Exit 7

@@ -112,16 +112,12 @@ outer_loop_end:
     ret
 
 2_exit:
-    li a0, 10
     li a1, 2
-    ecall
+    j exit2
 3_exit:
-    li a0, 10
     li a1, 3
-    ecall
+    j exit2
 4_exit:
-    li a0, 10
     li a1, 4
-    ecall
-
+    j exit2
 

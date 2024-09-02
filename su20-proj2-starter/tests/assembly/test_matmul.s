@@ -31,4 +31,4 @@ main:
     jal ra, print_int_array
 
     # Exit the program
-    jal exit
+    j exit
