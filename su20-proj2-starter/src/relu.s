@@ -20,7 +20,7 @@ loop_start:
     
 loop_continue:
     lw t0, 0(a0)
-    blt x0,t0, max
+    bge t0, x0, max
     sw x0, 0(a0)
 max:
     addi a0, a0, 4
