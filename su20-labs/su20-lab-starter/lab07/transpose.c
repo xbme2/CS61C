@@ -15,14 +15,26 @@ void transpose_naive(int n, int blocksize, int *dst, int *src) {
 /* Implement cache blocking below. You should NOT assume that n is a
  * multiple of the block size. */
 void transpose_blocking(int n, int blocksize, int *dst, int *src) {
-    // YOUR CODE HERE
+    for (int i = 0; i < n; i+=blocksize) {
+        for (int j = 0; j < n; j+=blocksize) {
+            int xLimit = ( i + blocksize > n)? n - i : blocksize;
+            int yLimit = ( j + blocksize > n)? n - j : blocksize;
+            for (int x = 0; x < xLimit; x++) {
+                for (int y = 0; y < yLimit; y++) {
+                    dst[y + x * n + j  + i * n] = src[x + y * n + j * n + i ];
+                }
+            }
+        }
+    }
+    
+    
 }
 
 void benchmark(int *A, int *B, int n, int blocksize,
     void (*transpose)(int, int, int*, int*), char *description) {
 
     int i, j;
-    printf("Testing %s: ", description);
+    // printf("Testing %s: ", description);
 
     /* initialize A,B to random integers */
     srand48( time( NULL ) );
@@ -38,7 +50,7 @@ void benchmark(int *A, int *B, int n, int blocksize,
 
     double seconds = (end.tv_sec - start.tv_sec) +
         1.0e-6 * (end.tv_usec - start.tv_usec);
-    printf( "%g milliseconds\n", seconds*1e3 );
+    printf( "%g milliseconds", seconds*1e3 );
 
 
     /* check correctness */
@@ -67,7 +79,10 @@ int main( int argc, char **argv ) {
 
     /* run tests */
     benchmark(A, B, n, blocksize, transpose_naive, "naive transpose");
+    printf(" VS ");
     benchmark(A, B, n, blocksize, transpose_blocking, "transpose with blocking");
+    printf("\n");
+
 
     /* release resources */
     free( A );

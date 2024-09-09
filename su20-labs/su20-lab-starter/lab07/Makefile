@@ -13,7 +13,7 @@ all: $(PROGS)
 
 ex2:
 		$(CC) -o $(EX2_PROG) $(CFLAGS) $(EX2_PROG).c
-			./$(EX2_PROG)
+		taskset -c 0 ./$(EX2_PROG)
 
 ex3:
 		$(CC) -o $(EX3_PROG) $(CFLAGS) $(EX3_PROG).c

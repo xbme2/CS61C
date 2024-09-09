@@ -1,51 +1,53 @@
 Exercise 1
 	Scenario 1
-		1. 
-		2.
-		3.
+		1. stepsize in bytes = blocksize in bytes
+		2. 0 ;  for stepsize in bytes = blocksize in bytes
+		3. repcount from 0 to 1
 
 	Scenario 2
-		1.
-		2.
-		3.
-		4.
-		5.
+		1. 2
+		2. every 4 access the first access is always miss
+		3. 3 / 4 = 75%
+		4. almost 100% ; for cache size is equal to arraysize , cache has any element
+		5. we should access  cache size of thw array each time , 
+		   and apply all functions into those elements
 
 	Scenario 3
-		1.
-		2.
-		3.
-		4.
-		5.
+		1. 50%  0%	50%
+		2. 32	16
+		3. 16   only when we get a L1 miss we access L2 cache
+		4. repcount , because L1 cache size is smaller , L2 cache size is equal to arraysize
+		5. (1) no change	(2) L1_HR increases , L2_HR no change
 
 Exercise 2
-	ijk:
-	ikj:
-	jik:
-	jki:
-	kij:
-	kji:
+	ijk:	n = 1000, 1.204 Gflop/s
+	ikj:	n = 1000, 0.578 Gflop/s
+	jik:	n = 1000, 1.142 Gflop/s
+	jki:	n = 1000, 6.969 Gflop/s
+	kij:	n = 1000, 0.450 Gflop/s
+	kji:	n = 1000, 3.605 Gflop/s
 
-	1.
-	2.
-	3.
+
+	1. jki
+	2. kij
+	3. smaller stride , better performance
 
 Exercise 3
 	Part 1
-		blocksize = 20, n = 100: 
-		blocksize = 20, n = 1000: 
-		blocksize = 20, n = 2000: 
-		blocksize = 20, n = 5000: 
-		blocksize = 20, n = 10000: 
+		blocksize = 20, n = 100: 	0.011 milliseconds VS 0.012 milliseconds
+		blocksize = 20, n = 1000:  	3.304 milliseconds VS 1.914 milliseconds
+		blocksize = 20, n = 2000: 	25.895 milliseconds VS 7.949 milliseconds
+		blocksize = 20, n = 5000: 	395.566 milliseconds VS 59.07 milliseconds
+		blocksize = 20, n = 10000:  2253.56 milliseconds VS 222.534 milliseconds
 
-		1.
-		2.
+		1. n is big
+		2. in case cache size is bigger than arraysize
 
 	Part 2
-		blocksize = 50, n = 10000:
-		blocksize = 100, n = 10000:
-		blocksize = 500, n = 10000:
-		blocksize = 1000, n = 10000:
-		blocksize = 5000, n = 10000:
+		blocksize = 50, n = 10000:	 2104.79 milliseconds VS 190.265 milliseconds
+		blocksize = 100, n = 10000:  2307.81 milliseconds VS 161.609 milliseconds
+		blocksize = 500, n = 10000:  2224.03 milliseconds VS 173.441 milliseconds
+		blocksize = 1000, n = 10000: 2293.53 milliseconds VS 230.219 milliseconds
+		blocksize = 5000, n = 10000: 2113.93 milliseconds VS 1800.96 milliseconds
 
-		1.
+		1. rise , then drop
