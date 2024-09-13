@@ -12,4 +12,4 @@ common.o: common.h
 .PHONY : clean
 clean:
 	-rm -f simd
-	-rm -rf *.o
+	-rm -f *.o
